@@ -48,3 +48,5 @@ time_periods = {'morning_begin':'06:00:00',
                 'noon_begin':'09:00:00',
                 'afternoon_begin':'15:00:00',
                 'evening_begin':'19:00:00'}
+
+git_dict = {'change has been made':1}
