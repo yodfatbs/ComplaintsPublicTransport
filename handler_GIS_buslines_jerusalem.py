@@ -1,6 +1,12 @@
 
 from config_arcpy import *
-from config_general import *
+
+
+
+import arcpy 
+arcpy.env.overwriteOutput=True
+arcpy.env.workspace="gis/main_map/main_map.gdb"
+
 from general_functions import calculate_route_length, to_df
 
 

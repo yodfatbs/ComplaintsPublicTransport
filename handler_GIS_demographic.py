@@ -1,11 +1,10 @@
 from config_arcpy import *
-from config_general import *
 # from dicts import GIS_links
 
-# def create_basic_layers():
-#     for key, value in GIS_links.items(): #create the layers jlm_metro, statistical_areas_2022, bus_routes_from_GTFS, jlm_city_boundries
-#         arcpy.management.MakeFeatureLayer(value, key)
-#         print(f'{key} layer created')
+import arcpy 
+arcpy.env.overwriteOutput=True
+arcpy.env.workspace="gis/main_map/main_map.gdb"
+
 
 
 def create_demographic_sa():

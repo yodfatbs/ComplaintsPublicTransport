@@ -1,5 +1,9 @@
+import pandas as pd
+import arcpy 
+arcpy.env.overwriteOutput=True
+arcpy.env.workspace="gis/main_map/main_map.gdb"
+
 from config_arcpy import *
-from config_general import *
 from dicts import *
 
 def add_zeros_codoflocality(value):
@@ -135,4 +139,14 @@ def prepare_data_to_directness_analysis():
     print ('pre directness analysis complete')
     return 
 
+###########################################################################################
+###########################################################################################
 
+def create_directness():
+    directness=pd.read_csv('outputs/final_directness.csv')
+    directness_res12=directness[['route_desc', 'directness']].copy()
+
+    directness[['routeid','Direction','Alternative']] = directness['route_desc'].str.split('-',expand=True)
+    directness['routeid_direction']=directness['routeid'].astype(str)+'-'+directness['Direction'].astype(str)
+    directness_res3=directness.groupby('routeid_direction', as_index=False)['directness'].mean()
+    return directness_res12, directness_res3

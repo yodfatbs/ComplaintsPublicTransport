@@ -1,5 +1,9 @@
 from config_arcpy import *
 
+import arcpy 
+arcpy.env.overwriteOutput=True
+arcpy.env.workspace="gis/main_map/main_map.gdb"
+
 from general_functions import to_df
 
 

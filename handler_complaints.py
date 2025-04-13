@@ -1,5 +1,5 @@
-from config_general import *
-
+import pandas as pd
+import numpy as np
 
 def complatints_resolution1(relevant_complaints):
     """ 

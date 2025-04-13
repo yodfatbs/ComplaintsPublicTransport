@@ -1,7 +1,17 @@
+import arcpy 
+arcpy.env.overwriteOutput=True
+arcpy.env.workspace="gis/main_map/main_map.gdb"
+
+import pandas as pd
+import numpy as np
+
+
 from config_arcpy import *
-from config_general import *
 from dicts import *
-from general_functions import calculate_route_length, to_df, seperate_routeid_direction_alternative
+from general_functions import to_df, seperate_routeid_direction_alternative
+
+
+
 
 def calculate_socio_eco_per_stop():
     """ 
@@ -134,7 +144,10 @@ def calulate_weighted_mean_per_stop(ranked_lines, passengers_in_stops):
     
     #include only stops in residential areas
     residential_copy=socio_eco_validations[
-        ~socio_eco_validations['updated_ultraorthodox_percent'].isna()].copy()
+        (~socio_eco_validations['updated_ultraorthodox_percent'].isna())
+        &
+        (~socio_eco_validations['socioeco_2019'].isna())
+        ].copy()
 
     # find sum of passengers per line
     residential_copy['all_passengers']=residential_copy.groupby('route_desc')['passengersnumber'].transform('sum') 

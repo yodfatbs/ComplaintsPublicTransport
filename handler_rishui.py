@@ -1,5 +1,5 @@
-from config_general import *
-
+import numpy as np
+import pandas as pd
 
 from dicts import buses_links, rishui_dict, service_type_dict, time_periods
 
@@ -84,6 +84,9 @@ def passengers_resolutions():
     stops_olim['routeid_direction']=stops_olim['officelineid'].astype(str)+'-'+stops_olim['direction'].astype(str)
     passengers_res12=stops_olim.groupby('makat', as_index=False)['passengersnumber'].sum()
     passengers_res3=stops_olim.groupby('routeid_direction', as_index=False)['passengersnumber'].sum()
+
+    passengers_res12['passengersnumber']=passengers_res12['passengersnumber']/1000
+    passengers_res3['passengersnumber']=passengers_res3['passengersnumber']/1000
 
     print ('passengers numbers per line are printed')
     return passengers_res12, passengers_res3

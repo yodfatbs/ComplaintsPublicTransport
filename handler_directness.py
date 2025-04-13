@@ -1,4 +1,5 @@
-from config_general import *
+import pandas as pd
+import numpy as np
 import osmnx as ox
 ox.settings.log_console = True
 ox.settings.max_query_area_size = 25e12

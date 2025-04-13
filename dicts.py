@@ -1,16 +1,8 @@
-import os
-
 cbs_links={'demographic_urb_path':"external_files/cbs_files/socio_eco_urb.xlsx",
                 'demographic_reg_path':"external_files/cbs_files/socio_eco_regional.xlsx",
                 'demographic_sub_path':"external_files/cbs_files/socio_eco_suburb.xlsx",
                 'ultraorthodox_path':"external_files/cbs_files/ultraorthodox_state.xlsx"}
 
-# GIS_links={'statisticalareas_2022':'external_files/gis_layers/governmental_layers.gdb/statisticalareas_demography2022',
-# 'jlm_metropolitan_boundries':'external_files/gis_layers/governmental_layers.gdb/jlm_metro',
-# 'jlm_city_boundries':'external_files/gis_layers/governmental_layers.gdb/jlm_city_boundries',
-# 'settlements':'external_files/gis_layers/settlements/settlements.shp',
-# 'bus_routes_from_GTFS':'external_files/gis_layers/gtfs_layers.gdb/bus_routes_from_GTFS',
-# 'stops_from_GTFS':'external_files/gis_layers/gtfs_layers.gdb/stops_from_GTFS'}
 
 buses_links = {'rishui_lines':"external_files/transportation_ministry/rishui_lines.xlsx",
                'NPTA_extractions':"external_files/transportation_ministry/extract_npta_060324.xlsx",
@@ -19,16 +11,6 @@ buses_links = {'rishui_lines':"external_files/transportation_ministry/rishui_lin
 
 GTFS_links = {'stops_path':'external_files/GTFS_files_june_23/stops.txt',
 }
-
-# lines_stops_path="C:/thesis/data/26.10_npta_data/extract_npta_060324.xlsx"
-# stops_path="C:/thesis/data/gtfs-june 2023/stops.txt"
-# jlm_lines_path="C:/thesis/gis/scripts/Question1/bus_routes_jlm_metro.csv"
-# stops_in_jlm_metro="C:/thesis/gis/scripts/jlm_stops.csv" #make beforhand!
-
-# start_end=make_line_trip_with_stops(lines_stops_path,stops_path,stops_in_jlm_metro, jlm_lines_path)
-
-
-
 
 # Demographic
 demographic_dict={'INDEX POPULATION 2019[1]':'pop_2019',

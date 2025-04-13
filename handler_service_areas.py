@@ -1,8 +1,10 @@
 from config_arcpy import *
-from config_general import *
 from general_functions import calculate_route_length, to_df, seperate_routeid_direction_alternative
 
-
+import numpy as np
+import arcpy 
+arcpy.env.overwriteOutput=True
+arcpy.env.workspace="gis/main_map/main_map.gdb"
 
 ###########################################################################################
 ###########################################################################################
