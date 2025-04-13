@@ -1,7 +1,5 @@
 from config_arcpy import *
 
-from dicts import GIS_links
-
 from general_functions import to_df
 
 

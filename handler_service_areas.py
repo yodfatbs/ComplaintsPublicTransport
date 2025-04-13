@@ -1,44 +1,9 @@
 from config_arcpy import *
 from config_general import *
-from general_functions import *
+from general_functions import calculate_route_length, to_df, seperate_routeid_direction_alternative
 
-def calculate_route_length(feature,field_to_calculate,new_field_name):
-    """ 
-    function makes: calculate length of bus line
-    function gets: layer to calculate (bus lines), field to calculate (shape length), and new field name (area)
-    function returns: new column in layer saying what is the line length
-    """
-    try:
-    # Set the name of the field you want to calculate
-        arcpy.management.AddField(feature, new_field_name, "FLOAT")
-    # Expression for calculation (e.g., copying values from another field)
-        to_km_length = "round(100*!"+field_to_calculate+"!,2)"  # Replace "OtherField" with the actual field name
-    # Use CalculateField_management
-        arcpy.management.CalculateField(in_table=feature, 
-                                        field=new_field_name, 
-                                        expression=to_km_length, 
-                                        expression_type="PYTHON3",
-                                        field_type="FLOAT")
-    except arcpy.ExecuteError:
-        print(arcpy.GetMessages())
 
-###########################################################################################
-###########################################################################################
 
-def seperate_routeid_direction_alternative(df):
-    """ 
-    function makes: finds wether a bus line is from east jlm, and then exclude it from calculations
-    function gets: dataframe of makat and route percent inside research area (west/east to JLM)
-    function returns: 2 dataframes, in resolution 12, and 3, of lines with percent of route inside research area (west/east to JLM)
-    """
-
-    # clean and orgnaize data
-    df_part=df.copy()
-    df_part[['routeid','Direction','Alternative']] = df_part['route_desc'].str.split('-',expand=True)
-    df_part['routeid_direction'] = df_part['routeid'].astype(str)+'-'+df_part['Direction'] # for resolution 3
-    df_part.rename(columns={"route_desc": "makat"}, inplace=True)
-    
-    return df_part.drop_duplicates()
 ###########################################################################################
 ###########################################################################################
 
@@ -52,7 +17,7 @@ def create_service_areas(service_area):
 ###########################################################################################
 ###########################################################################################
 
-def calculate_line_percent_within_sevice_area(outfieldname,layer_name='temp',final_bus_layer='bus_routes_jlm_metro'):
+def calculate_line_percent_within_sevice_area(outfieldname,final_bus_layer=final_bus_layer,layer_name='temp'):
     #calculate whole route length
     arcpy.management.CopyFeatures(final_bus_layer, layer_name)#feature  for calculation
     calculate_route_length(layer_name,'Shape_Length','whole_route_length_km')#calculate whole route length 
@@ -124,7 +89,7 @@ def match_lines_to_service_areas():
 ###########################################################################################
 ###########################################################################################
 
-def create_in_jlm_lines(final_bus_layer='bus_routes_jlm_metro'):
+def create_in_jlm_lines(final_bus_layer=final_bus_layer):
 
     lines=to_df(final_bus_layer)
 
@@ -142,9 +107,8 @@ def determine_service_area(resolution):
     resolution['settlements']=np.where(resolution['settlements']>=20,1,0)
     resolution['west']=np.where((resolution['west']>=20)&(resolution['settlements']==0),1,0)
     resolution['injlm']=np.where(resolution['percent_inside_jlm']>=0.8,1,0)
-
-    return resolution.drop(columns='percent_inside_jlm')
-
+    resolution.drop(columns='percent_inside_jlm', inplace=True)
+    resolution.drop_duplicates(inplace=True)
 ###########################################################################################
 ###########################################################################################
 
@@ -160,15 +124,16 @@ def create_service_areas_resolutions(risui_res12):
 
     #add east JLM lines
     service_areas_12=service_areas_12.merge(risui_res12[['makat','eastwest']].drop_duplicates(), on='makat', how='inner')
+
     service_areas_12.loc[service_areas_12['eastwest']==1, 'settlements'] = 0 # settlement line cannot be east jlm line
-
-    res_12=determine_service_area(service_areas_12)
-
     service_areas_3=service_areas_12.drop(columns='makat').groupby('routeid_direction', as_index=False).mean()
 
-    res3=determine_service_area(service_areas_3)
+    determine_service_area(service_areas_12)
+    determine_service_area(service_areas_3)
+
+
     print ('service areas are printed')
-    return res_12.drop(columns='routeid_direction'), res3
+    return service_areas_12.drop(columns='routeid_direction'), service_areas_3
 
 
 

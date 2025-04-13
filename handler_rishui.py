@@ -40,7 +40,7 @@ def rishui_basic_data(lines_df):
     return lines_jlm[['routeid','makat','routeid_direction', 'type', 'route_length', 'eastwest']]
 
 ###########################################################################################
-###########################################################################################
+
 
 def rishui_resolution3(rishui_res12):
     """ 
@@ -59,9 +59,19 @@ def rishui_resolution3(rishui_res12):
     return rishui_lines_res3
 
 ###########################################################################################
+
+
+def rishui_resolutions(JLM_lines):
+    """
+    function makes: create rishui files in 3 resolutions by usin above functions      
+    """
+    risui_res12=rishui_basic_data(JLM_lines)
+    rishui_res3=rishui_resolution3(risui_res12)
+    return risui_res12, rishui_res3
+###########################################################################################
 ###########################################################################################
 
-def passengers():
+def passengers_resolutions():
     """ 
     function makes: passengers number in each makat
     function gets:csv with validations in each stop in each routeid in Tuesday 10/01/2023
@@ -112,40 +122,30 @@ def clean_ebitzua():
 
 ###########################################################################################
 ###########################################################################################
-def ebitzua_resolutions(ebtzua):
 
+def ebitzua_resolutions(): 
     """ 
     function makes: calculates number and pecent of non-intact trips to each routeid-direction-alternative-day period
     function gets: rishui-bizua datagrame for 10/01/2023, taken from NPTA 
     function returns: dataframe with number and percent of non intact trips by routeid-direction-alternative and day period
     """
+    ebtzua=clean_ebitzua() # clean ebitzua for further analysis
 
+    ebitzua_resolutinos=[]
+    agg_dict={'res1':['makat','day_period'], 
+            'res2':['makat'],
+            'res3':['routeid_direction']}
+    for res  in agg_dict.keys():
+        ebtzua_grouped=ebtzua.groupby(agg_dict[res], as_index=False).agg(
+            number_of_trips = ('tripid_date', 'nunique'),
+            number_of_not_intact_trips = ('not_intact', 'sum'))
 
+        ebtzua_grouped['not_intact_percent']=round(
+            100*(ebtzua_grouped['number_of_not_intact_trips']/ebtzua_grouped['number_of_trips']),2)
+        
+        ebtzua_grouped.drop(['number_of_not_intact_trips', 'number_of_trips'], axis=1, inplace=True)
+        ebitzua_resolutinos.append(ebtzua_grouped)
 
-#calculate number & percent of not-intact trips
-    ebtzua_grouped=ebtzua.groupby(['makat','day_period'], as_index=False).agg(number_of_trips = ('tripid_date', 'nunique'),
-                                                                              number_of_not_intact_trips = ('not_intact', 'sum'))
-    
-    ebtzua_grouped['not_intact_percent']=round(
-        100*(ebtzua_grouped['number_of_not_intact_trips']/ebtzua_grouped['number_of_trips']),2)
-    
-    #get ebitzua_res1
-    rishui_res1=ebtzua_grouped[['makat','day_period', 'not_intact_percent']].copy()
+    print ('e-bitua data printed')
+    return ebitzua_resolutinos[0], ebitzua_resolutinos[1], ebitzua_resolutinos[2]
 
-    return ebtzua_grouped
-    
-def ebitzua_resolution2(ebtzua):
-
-    """ 
-    function makes: calculates number and pecent of non-intact trips to each routeid-direction-alternative
-    function gets: rishui-bizua datagrame for 10/01/2023, taken from NPTA 
-    function returns: dataframe with number and percent of non intact trips by routeid-direction-alternative and day period
-    """
-    ebtzua_copy=ebtzua.copy()
-    #calculate number & percent of not-intact trips
-    ebtzua_copy_grouped=ebtzua_copy.groupby(['makat'], as_index=False).agg({"tripid_date": "nunique",'not_intact':'sum'})
-    ebtzua_copy_grouped.rename(columns = {'tripid_date':'number_of_trips','not_intact':'number_of_not_intact_trips'}, inplace = True) 
-
-    ebtzua_copy_grouped['not_intact_percent']=round(
-        100*(ebtzua_copy_grouped['number_of_not_intact_trips']/ebtzua_copy_grouped['number_of_trips']),2)
-    return ebtzua_copy_grouped[['makat', 'not_intact_percent']]

@@ -62,11 +62,14 @@ def complatints_resolution3(relevant_complaints):
 ###########################################################################################
 
 
-def main_complaints():
+def complaints_resolutions():
     complaints_file='external_files/transportation_ministry/complaints_clean.xlsx'
     complaint=pd.read_excel(complaints_file)
     relevant_complaints=complaint[complaint['relevant']==1].copy()
     res1=complatints_resolution1(relevant_complaints)
     res2=complatints_resolution2(relevant_complaints)
     res3=complatints_resolution3(relevant_complaints)
+
+    print ('scomplaints data printed')
+
     return res1, res2, res3
