@@ -1,7 +1,13 @@
 import numpy as np
 import pandas as pd
 
-from dicts import buses_links, rishui_dict, service_type_dict, time_periods
+from dicts import Links
+
+
+buses_links=Links['buses_links']
+rishui_dict=Links['rishui_dict']
+service_type_dict=Links['service_type_dict']
+time_periods=Links['time_periods']
 
 
 def rishui_basic_data(lines_df):

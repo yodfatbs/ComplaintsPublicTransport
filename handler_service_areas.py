@@ -1,28 +1,33 @@
-from config_arcpy import *
-from general_functions import calculate_route_length, to_df, seperate_routeid_direction_alternative
-
-import numpy as np
 import arcpy 
+import numpy as np
 arcpy.env.overwriteOutput=True
 arcpy.env.workspace="gis/main_map/main_map.gdb"
+
+from general_functions import calculate_route_length, to_df, seperate_routeid_direction_alternative
+from dicts import GIS
+
+layers = GIS['gis_layers']
+fields_names = GIS['gis_fields_and_names']
 
 ###########################################################################################
 ###########################################################################################
 
 def create_service_areas(service_area):
     if service_area=='west_netropolitan_area': #for west metropolin lines
-        arcpy.analysis.Union([occupation, jlm_boundry], "unioned") #union jerusalem and west bank
-        arcpy.analysis.Erase(jlm_metro, 'unioned', 'clipper') #exclude the west metropolitan area
+        arcpy.analysis.Union([layers['occupation'], layers['jlm_boundry']], "unioned") #union jerusalem and west bank
+        arcpy.analysis.Erase(layers['jlm_metro'], 'unioned', 'clipper') #exclude the west metropolitan area
     elif service_area=='West_Bank_Settlements':
-        arcpy.analysis.Erase(occupation,jlm_boundry, 'clipper') #exclude from west bank area the east jerusaelm area
+        arcpy.analysis.Erase(layers['occupation'],layers['jlm_boundry'], 'clipper') #exclude from west bank area the east jerusaelm area
         
 ###########################################################################################
 ###########################################################################################
 
-def calculate_line_percent_within_sevice_area(outfieldname,final_bus_layer=final_bus_layer,layer_name='temp'):
+def calculate_line_percent_within_sevice_area(outfieldname,
+                                              final_bus_layer=fields_names['final_bus_layer'],
+                                              layer_name='temp'):
     #calculate whole route length
     arcpy.management.CopyFeatures(final_bus_layer, layer_name)#feature  for calculation
-    calculate_route_length(layer_name,'Shape_Length','whole_route_length_km')#calculate whole route length 
+    calculate_route_length(layer_name,'Shape_Length',fields_names['whole_route_field'])#calculate whole route length 
 
     #calculate route length inside area
     arcpy.analysis.Clip(layer_name, 'clipper','clipped_middle' ) # clip routes inside jlm  boundry
@@ -41,7 +46,7 @@ def calculate_line_percent_within_sevice_area(outfieldname,final_bus_layer=final
                 cursor.updateRow(row)
 
     # calculate % within area
-    percent_inside ="round(100*(float(!{0}!) / float(!{1}!)), 2)".format('clipped_route_km', 'whole_route_length_km')
+    percent_inside ="round(100*(float(!{0}!) / float(!{1}!)), 2)".format('clipped_route_km', fields_names['whole_route_field'])
     arcpy.management.CalculateField(layer_name, outfieldname, percent_inside, "PYTHON3")
     df=to_df(layer_name)
     df=df[df['route_type_text']=='Bus'].copy()
@@ -71,9 +76,9 @@ def match_lines_to_service_areas():
         
         #filter duplications
         df=df_process.groupby(['route_id', 'agency_id', 'route_desc'], as_index=False).agg(
-            {'whole_route_length_km':'mean', 
-            'jlm_route_length_km':'mean', 
-            'percent_inside_jlm':'mean', 
+            {fields_names['whole_route_field']:'mean', 
+            fields_names['inside_jlm_field']:'mean', 
+            fields_names['percent_inside_jlm_field']:'mean', 
             'clipped_route_km':'mean', 
             outfieldname:'mean'})
         #delete spare layers
@@ -91,12 +96,13 @@ def match_lines_to_service_areas():
 ###########################################################################################
 ###########################################################################################
 
-def create_in_jlm_lines(final_bus_layer=final_bus_layer):
+def create_in_jlm_lines(final_bus_layer=fields_names['final_bus_layer']):
 
     lines=to_df(final_bus_layer)
 
     lines=seperate_routeid_direction_alternative(lines)
-    injlm_res12=lines.loc[(lines['route_type_text']=='Bus')][['makat','routeid_direction', 'percent_inside_jlm']].drop_duplicates()
+    injlm_res12=lines.loc[(lines['route_type_text']=='Bus')][
+        ['makat','routeid_direction', 'percent_inside_jlm']].drop_duplicates()
 
 
     # injlm_res3=injlm_res12.groupby('routeid_direction', as_index=False)['injlm'].mean()

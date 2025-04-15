@@ -1,10 +1,13 @@
-from config_arcpy import *
 # from dicts import GIS_links
 
 import arcpy 
 arcpy.env.overwriteOutput=True
 arcpy.env.workspace="gis/main_map/main_map.gdb"
 
+from dicts import GIS
+
+layers = GIS['gis_layers']
+fields_names = GIS['gis_fields_and_names']
 
 
 def create_demographic_sa():
@@ -15,7 +18,8 @@ def create_demographic_sa():
     This is only for non-settlements. the next function shall be for that
     """
     #select stat area inside jlm and save as temporary table
-    Select_sa_in_jlm = arcpy.SelectLayerByLocation_management(statisticalareas_2022, "WITHIN",jlm_metro) 
+    Select_sa_in_jlm = arcpy.SelectLayerByLocation_management(
+        layers['statisticalareas_2022'], "WITHIN",layers['jlm_metro']) 
     arcpy.CopyFeatures_management(Select_sa_in_jlm, "sa_without_settlements") 
     #1.
     arcpy.conversion.TableToTable("outputs/demographic_table.csv", 
@@ -51,7 +55,7 @@ def add_settlements_data():
     arcpy.MakeFeatureLayer_management('sa_including_settlements', "TempLayer") #create temporary table for calculations of settlement area
     arcpy.SelectLayerByAttribute_management('TempLayer', "NEW_SELECTION", settlements_query)#select settlements and create new int field to update
     #create settlements layer inside GDB
-    arcpy.conversion.FeatureClassToFeatureClass(settlements, arcpy.env.workspace, 'settlements_inprogress') 
+    arcpy.conversion.FeatureClassToFeatureClass(layers['settlements'], arcpy.env.workspace, 'settlements_inprogress') 
     #dissolve different parts of settlements into one
     arcpy.management.Dissolve('settlements_inprogress', 'settlements', ["NAME_NAME"]) 
 

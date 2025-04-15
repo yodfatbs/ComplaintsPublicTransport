@@ -6,27 +6,30 @@ import pandas as pd
 import numpy as np
 
 
-from config_arcpy import *
-from dicts import *
+# from dicts import *
 from general_functions import to_df, seperate_routeid_direction_alternative
+from dicts import GIS, Links
 
+layers = GIS['gis_layers']
+fields_names = GIS['gis_fields_and_names']
 
+buses_links=Links['buses_links']
 
 
 def calculate_socio_eco_per_stop():
     """ 
     function makes: layer of bus stops inside jlm metro, each has demogrphic data
     """
-    select_stops_in_jlm_metro = arcpy.SelectLayerByLocation_management(in_layer=stops_from_GTFS, #only stops in jlm metro area
+    select_stops_in_jlm_metro = arcpy.SelectLayerByLocation_management(in_layer=layers['stops_from_GTFS'], #only stops in jlm metro area
                                                                        overlap_type="WITHIN", 
-                                                                       select_features=jlm_metro) 
+                                                                       select_features=layers['jlm_metro']) 
     
      # give bus stops a socio-economic ranking based on location
     arcpy.CopyFeatures_management(in_features=select_stops_in_jlm_metro, 
-                                  out_feature_class='jlm_stops')
+                                  out_feature_class=fields_names['stop_in_jlm_metro'])
 
     #give socio eco record to stops if they are inside a statistical area
-    arcpy.analysis.SpatialJoin(target_features='jlm_stops', 
+    arcpy.analysis.SpatialJoin(target_features=fields_names['stop_in_jlm_metro'], 
                                join_features="sa_including_settlements", 
                                out_feature_class='select_1st_step',
                                match_option='INTERSECT')
@@ -38,15 +41,16 @@ def calculate_socio_eco_per_stop():
 
     #delete fields from the spatial join
     outside = [field.name for field in arcpy.ListFields('outside_sa')]
-    all = [field.name for field in arcpy.ListFields('jlm_stops')]
+    all = [field.name for field in arcpy.ListFields(fields_names['stop_in_jlm_metro'])]
     to_keep=[field for field in outside if field  in all]
     arcpy.management.DeleteField('outside_sa', to_keep, "KEEP_FIELDS")
 
     #give socio eco record to stops based on proxmity statistical area
-    arcpy.analysis.SpatialJoin('outside_sa', "sa_including_settlements", 'outside_sa_closest',match_option='CLOSEST')
+    arcpy.analysis.SpatialJoin('outside_sa', "sa_including_settlements", 
+                               'outside_sa_closest',match_option='CLOSEST')
 
     #merge the dots together and delete the spare layers
-    arcpy.Merge_management(['outside_sa_closest', 'inside_sa'], stops_jlm_layer_name)
+    arcpy.Merge_management(['outside_sa_closest', 'inside_sa'], fields_names['stops_jlm_layer_name'])
     arcpy.management.Delete('outside_sa')
     arcpy.management.Delete('outside_sa_closest')
     arcpy.management.Delete('inside_sa')
@@ -72,7 +76,8 @@ def match_stops_to_bus_route(bus_lines_jlm):
     lines_stops.rename(columns={'StationId':'stop_code'},inplace=True)
 
     #dataframe of the relevant buses
-    stop_route_jlm=lines_stops[lines_stops['route_desc'].isin(bus_lines_jlm['route_desc'])].drop_duplicates() 
+    stop_route_jlm=lines_stops[lines_stops['route_desc'].isin(
+        bus_lines_jlm['route_desc'])].drop_duplicates() 
 
     return stop_route_jlm
     ###########################################################################################
@@ -85,7 +90,7 @@ def calculate_socio_eco_per_line(stop_route_jlm):
     """
 
 #calculate socio eco of each stop in jlm metro based on proximity to SA
-    stops_in_jlm=to_df(stops_jlm_layer_name)
+    stops_in_jlm=to_df(fields_names['stops_jlm_layer_name'])
 
     stops_in_jlm=stops_in_jlm[
         (stops_in_jlm['Main_Function_Code']==1)&(~stops_in_jlm['Pop_Total'].isnull())]#include only stops in residential areas

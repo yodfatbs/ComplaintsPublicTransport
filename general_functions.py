@@ -3,8 +3,10 @@ import arcpy
 arcpy.env.overwriteOutput=True
 arcpy.env.workspace="gis/main_map/main_map.gdb"
 
-from config_arcpy import *
-from dicts import *
+from dicts import GIS, Links
+
+fields_names = GIS['gis_fields_and_names']
+buses_links=Links['buses_links']
 
 def add_zeros_codoflocality(value):
     """
@@ -112,7 +114,7 @@ def prepare_data_to_directness_analysis():
     lines_stops_all.rename(columns={'StationId':'stop_code'},inplace=True)
 
     #take only lines in jlm
-    jlm_lines=to_df(final_bus_layer)
+    jlm_lines=to_df(fields_names['final_bus_layer'])
     lines_stops_start=lines_stops_all[lines_stops_all['route_desc'].isin(jlm_lines['route_desc'])]
 
     #divide between direct and circular lines
@@ -133,7 +135,7 @@ def prepare_data_to_directness_analysis():
     lines_stops['stop_code']=lines_stops['stop_code'].astype('str')
 
     #attach geographic stops data
-    stops=to_df(stops_jlm_layer_name)[['stop_code','stop_name','stop_lat', 'stop_lon']] 
+    stops=to_df(fields_names['stops_jlm_layer_name'])[['stop_code','stop_name','stop_lat', 'stop_lon']] 
     stop_route_all= pd.merge(lines_stops, stops, on='stop_code', how='inner')
     stop_route_all.to_csv('outputs/direcness_measurement.csv')
     print ('pre directness analysis complete')

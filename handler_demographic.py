@@ -2,9 +2,12 @@
 import pandas as pd
 import numpy as np
 
-from dicts import demographic_dict,  demographic_columns, cbs_links
+from dicts import Links
 from general_functions import add_zeros_codoflocality, add_zeros_codofstatistical, turnzero
 
+demographic_dict=Links['demographic_dict']
+demographic_columns= Links['demographic_columns']
+cbs_links=Links['cbs_links']
 
 def urb():
     """
