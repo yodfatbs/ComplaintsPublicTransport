@@ -92,7 +92,7 @@ def export_to_excel(dfs):
             'Directness_measurements', 'Settlements_lines',
             'West_metropolin_lines', 'InJerusalem_lines',
             'percent_problematic_trips', 'number_of_complaints',
-            'passengersnumber_thousands']
+            'passengersnumber_thousands','socioeco_2019']
         if int==1:
             cols=['makat', 'day_period']
         elif int==2:
