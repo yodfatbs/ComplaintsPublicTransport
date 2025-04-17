@@ -95,6 +95,9 @@ def merge_and_export(res1_dfs, res2_dfs, res3_dfs,ebitzua_res1,complaints_res1):
 
 
     outputr_res1=create_res1(res1_dfs,ebitzua_res1,complaints_res1)
+    outputr_res1.loc[outputr_res1['makat']=='13068-1-ז', #fix null values
+                     ['percent_problematic_trips','number_of_complaints']] = 0,0
+    
     output_res2=create_res2(res2_dfs)
     output_res3=create_res3(res3_dfs)
 

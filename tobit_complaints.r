@@ -40,6 +40,7 @@ write_xlsx(results_df, "outputs//results_res3.xlsx")
 
 df2 <- read.csv("outputs//res2.csv")
 
+
 colnames(df2)
 df2$regional_sevice <- ifelse(df2$service_types == 2, 1, 0)
 df2$intercity_sevice <- ifelse(df2$service_types == 1, 1, 0)
@@ -61,6 +62,7 @@ results_df$Coefficient <- coeff_names
 # Reorder columns to put Coefficient names first
 results_df <- results_df[, c("Coefficient", colnames(results_df)[-ncol(results_df)])]
 print(results)
+write_xlsx(results_df, "outputs//results_res2.xlsx")
 write_xlsx(results_df, "outputs//results_res2.xlsx")
 
 
@@ -97,38 +99,5 @@ results_df$Coefficient <- coeff_names
 # Reorder columns to put Coefficient names first
 results_df <- results_df[, c("Coefficient", colnames(results_df)[-ncol(results_df)])]
 print(results)
-write_xlsx(results_df, "outputs//results_res1.xlsx")
-
-
-# #######################################################################################
-
-# #linear regression - problemtaic variables
-
-
-# m7 <- lm(number_of_complaints ~  suburbian + eastwest +
-# innercity + intercity + passengersnumber + directness + headway + not_intact_percent + settlements_binari + west_binari + in_jlm + is_ultraorthodox  + socioeco_2019 + updated_ultraorthodox_percent + arabs
-# ,  data = df)
-# results <- summary(m7)
-
-# results
-
-# #######################################################################################
-
-# # export to excel
-
-
-# coefficients <- results$estimate  # This typically contains the coefficients and statistics
-# coeff_names <- rownames(coefficients)
-
-# results_df <- as.data.frame(coefficients)
-# results_df$Coefficient <- coeff_names
-
-# # Reorder columns to put Coefficient names first
-# results_df <- results_df[, c("Coefficient", colnames(results_df)[-ncol(results_df)])]
-
-
-# # Print the results_df to check its structure
-# print(results)
-# write_xlsx(results_df, "C://thesis//gis//scripts//Question1//saved_steps//results1.xlsx")
-
+write_xlsx(results_df, "outputs//results_res1A.xlsx")
 
