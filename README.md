@@ -1,4 +1,4 @@
-# Master Thesis Documentation: Yodfat Ben-Shalom
+# Master Thesis Documentation: Geographical and social inequities in the number of public transport complaints: the case of Jerusalem
 
 This repository contains the code, data structure, and documentation for Yodfat Ben-Shalom's master's thesis:  
 **"Exploring the Factors Affecting the Number of Complaints in Public Transportation."**
