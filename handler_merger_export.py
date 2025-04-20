@@ -1,6 +1,6 @@
 
 def create_res1(res1_dfs,ebitzua_res1,complaints_res1):
-    res1=ebitzua_res1.merge(complaints_res1, on=['makat','day_period'], how='left')
+    res1=complaints_res1.merge(ebitzua_res1, on=['makat','day_period'], how='left').fillna(0)
     day_periods=res1['day_period'].drop_duplicates().to_frame()
     day_periods['tmp'] =1 
 
@@ -34,7 +34,7 @@ def create_res2(res2_dfs):
             r2=r2.merge(df, on ='makat', how='left')
             r2['number_of_complaints'].fillna(0, inplace=True)
         else:
-            r2=r2.merge(df, on ='makat', how='inner')
+            r2=r2.merge(df, on ='makat', how='left')
 
     return r2.drop_duplicates()
 
@@ -50,7 +50,7 @@ def create_res3(res3_dfs):
             r3=r3.merge(df, on ='routeid_direction', how='left')
             r3['number_of_complaints'].fillna(0, inplace=True)
         else:
-            r3=r3.merge(df, on ='routeid_direction', how='inner')
+            r3=r3.merge(df, on ='routeid_direction', how='left')
     return r3.drop_duplicates()
 
 ###########################################################################################
@@ -103,7 +103,7 @@ def merge_and_export(res1_dfs, res2_dfs, res3_dfs,ebitzua_res1,complaints_res1):
 
     dfs=[outputr_res1,output_res2,output_res3]
     export_to_excel(dfs)
-    return outputr_res1, output_res2,output_res3
+    return outputr_res1.fillna(0), output_res2.fillna(0),output_res3.fillna(0)
 
 
 ###########################################################################################

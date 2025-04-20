@@ -107,6 +107,8 @@ def make_jlm_metro_routes():
         calculate_percent_of_bus_route_inside_jlm()
         
         df=set_threshold_and_df()
+
+        print('relevant_buses_layer created')
         return df
 
     except arcpy.ExecuteError:

@@ -86,7 +86,7 @@ def merge_demographic():
     demographic_table['updated_ultraorthodox_percent']=demographic_table['ultraorthodox_percent'].apply(turnzero).fillna(0) 
 
     # merge socio-economic and ultra orthodox together, export to csv
-    demographic_table.to_csv("outputs/demographic_table.csv")
+    # demographic_table.to_csv("outputs/demographic_table.csv")
     return demographic_table
 ###########################################
 ###########################################

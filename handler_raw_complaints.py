@@ -104,15 +104,14 @@ def find_hours(complaints_copy):
 ###########################################################################################
 
 def create_basic_complaints():
-    
-    complaint_link="complaints_raw.xlsx" #dosn't show on git
+    complaint_link="external_files/transportation_ministry/complaints_raw_sample.xlsx" #dosn't show on git
 
     complaints_copy=pd.read_excel(complaint_link)
     find_hours(complaints_copy)
     find_relevant_complaints(complaints_copy)
     complaints_clean=complaints_copy[
-        ['Serial_number', 'subjectname', 'incident_date','makat',
+        ['ticketnumber', 'subjectname', 'incident_date','makat',
       'routeid_direction','hour','words_to_include', 'words_to_exclude','relevant']]
     
-    complaints_clean.to_excel('transportation_ministry/complaints_clean.xlsx', index=False)
+    complaints_clean.to_excel('external_files/transportation_ministry/complaints_clean.xlsx', index=False)
     return complaints_clean

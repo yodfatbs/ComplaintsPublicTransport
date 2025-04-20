@@ -18,7 +18,8 @@ def complatints_resolution1(relevant_complaints):
     res1_complaints.loc[res1_complaints['hour'].between(afternoon_begin,evening_begin,inclusive='left'), 'day_period'] = 3 #rush_afternoon
 
     #count number of complints by makat and day period
-    complaints_num=res1_complaints.groupby(['makat','day_period'], as_index = False).agg(number_of_complaints=('Serial_number','nunique'))
+    complaints_num=res1_complaints.groupby(['makat','day_period'], as_index = False).agg(
+        number_of_complaints=('ticketnumber','nunique'))
     
     return complaints_num
 
@@ -35,7 +36,7 @@ def complatints_resolution2(relevant_complaints):
 
         #count number of complints by makat and day period
     complaints_num=relevant_complaints.groupby(['makat'], as_index = False).agg(
-        number_of_complaints=('Serial_number','nunique'))
+        number_of_complaints=('ticketnumber','nunique'))
 
 
     #for logistic regression - if there are any complaints, put 1, else 0
@@ -54,7 +55,7 @@ def complatints_resolution3(relevant_complaints):
 
         #count number of complints by makat and day period
     complaints_num=relevant_complaints.groupby(['routeid_direction'], as_index = False).agg(
-        number_of_complaints=('Serial_number','nunique'))
+        number_of_complaints=('ticketnumber','nunique'))
     #for logistic regression - if there are any complaints, put 1, else 0
     return complaints_num
 

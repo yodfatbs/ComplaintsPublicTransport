@@ -3,6 +3,7 @@
 import arcpy 
 arcpy.env.overwriteOutput=True
 arcpy.env.workspace="gis/main_map/main_map.gdb"
+from handler_demographic import merge_demographic 
 
 from dicts import GIS
 
@@ -89,7 +90,7 @@ def build_GIS_demographic_data():
     function makes: runs all the above functions
     """
 
-    # create_basic_layers()
+    merge_demographic()#create demographic_layer
     create_demographic_sa()
     add_settlements_data()
     
