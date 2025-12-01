@@ -1,11 +1,12 @@
 # from dicts import GIS_links
+from dicts import GIS, workspace
 
 import arcpy 
+arcpy.env.workspace=workspace
+
 arcpy.env.overwriteOutput=True
-arcpy.env.workspace="gis/main_map/main_map.gdb"
 from handler_demographic import merge_demographic 
 
-from dicts import GIS
 
 layers = GIS['gis_layers']
 fields_names = GIS['gis_fields_and_names']
@@ -68,7 +69,7 @@ def add_settlements_data():
         for row in cursor: 
             name_to_match = row[1]
             query = "NAME_NAME = '{}'".format(name_to_match)
-            with arcpy.da.SearchCursor("settlements", ["SHAPE@"], where_clause=query) as search_cursor:
+            with arcpy.da.SearchCursor(arcpy.env.workspace+"/settlements", ["SHAPE@"], where_clause=query) as search_cursor:
                 for search_row in search_cursor:
                     # Update the geometry of the input feature
                     row[0] = search_row[0]

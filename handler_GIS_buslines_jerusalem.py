@@ -1,10 +1,10 @@
+from dicts import GIS, workspace
 
 import arcpy 
 arcpy.env.overwriteOutput=True
-arcpy.env.workspace="gis/main_map/main_map.gdb"
+arcpy.env.workspace=workspace
 
 from general_functions import calculate_route_length, to_df
-from dicts import GIS
 
 layers = GIS['gis_layers']
 fields_names = GIS['gis_fields_and_names']

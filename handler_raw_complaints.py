@@ -104,7 +104,7 @@ def find_hours(complaints_copy):
 ###########################################################################################
 
 def create_basic_complaints():
-    complaint_link="external_files/transportation_ministry/complaints_raw_sample.xlsx" #dosn't show on git
+    complaint_link="https://zenodo.org/record/17737309/files/complaints_raw_sample.xlsx?download=1" #dosn't show on git
 
     complaints_copy=pd.read_excel(complaint_link)
     find_hours(complaints_copy)
@@ -113,5 +113,5 @@ def create_basic_complaints():
         ['ticketnumber', 'subjectname', 'incident_date','makat',
       'routeid_direction','hour','words_to_include', 'words_to_exclude','relevant']]
     
-    complaints_clean.to_excel('external_files/transportation_ministry/complaints_clean.xlsx', index=False)
+    # complaints_clean.to_excel('external_files/transportation_ministry/complaints_clean.xlsx', index=False)
     return complaints_clean

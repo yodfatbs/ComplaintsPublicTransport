@@ -1,10 +1,11 @@
 import arcpy 
-arcpy.env.overwriteOutput=True
-arcpy.env.workspace="gis/main_map/main_map.gdb"
+from dicts import GIS, workspace
+
 
 import pandas as pd
 import numpy as np
-
+arcpy.env.workspace=workspace
+arcpy.env.overwriteOutput=True
 
 # from dicts import *
 from general_functions import to_df, seperate_routeid_direction_alternative
