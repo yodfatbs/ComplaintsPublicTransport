@@ -1,8 +1,8 @@
-# Master Thesis Documentation: Geographical and social inequities in the number of public transport complaints: the case of Jerusalem
+# Documentation: Spatial and Social Inequalities in Public Transport Complaints: Evidence from the Jerusalem Metropolitan Area
 
 This repository contains the code, data structure, and documentation for Yodfat Ben-Shalom's master's thesis:  
-**"Exploring the Factors Affecting the Number of Complaints in Public Transportation."**
-
+**"Spatial and Social Inequalities in Public Transport Complaints: Evidence from the Jerusalem Metropolitan Area."**
+- The repository contains The data analysis process, along with an example of 10 public complaints (the remaining complaints are confidential due to privacy restrictions)
 ---
 
 ## 📘 Contents
@@ -18,17 +18,24 @@ This repository contains the code, data structure, and documentation for Yodfat 
 
 ### `external_files/`  
 >
+- **settlements**:  
+  shapefile of settlements (shape file)
+
+### `files saved in zenodo  - https://zenodo.org/records/17778363`  
 
 - **CBS Data**:  
-  Socio-economic rankings by statistical area (Excel)
+  Socio-economic rankings by statistical area (Excel):
+  - socio_eco_regional.xlsx
+  - socio_eco_suburb.xlsx
+  - socio_eco_urb.xlsx
+  - ultraorthodox_state.xlsx
 
 - **NPTA Data**:  
   - Number of passengers per bus line and station  
-  - Non-execution data  
-  - Public complaints
+  - Non-execution data: extract_npta_060324.xlsx
+  - Public complaints: complaints_raw_sample.xlsx, complaints_clean.xlsx
 
-- **GIS Layers**:
--  🔗 [Download from Google Drive](https://drive.google.com/drive/folders/19JewMkLSk0M6Q6HsJNaThOsfkZZMvXaZ?usp=sharing)
+- **GIS Layers**: in the folder 'governmental_layers.gdb.zip'
   - Jerusalem city borders  
   - Jerusalem metropolitan borders  
   - West Bank borders  
