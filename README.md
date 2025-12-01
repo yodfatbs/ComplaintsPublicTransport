@@ -17,7 +17,7 @@ This repository contains the code, data structure, and documentation for Yodfat 
 ## 📁 Folder Structure
 
 ### `external_files/`  
-> 🔗 [Download from Google Drive](https://drive.google.com/drive/folders/19JewMkLSk0M6Q6HsJNaThOsfkZZMvXaZ?usp=sharing)
+>
 
 - **CBS Data**:  
   Socio-economic rankings by statistical area (Excel)
@@ -27,7 +27,8 @@ This repository contains the code, data structure, and documentation for Yodfat 
   - Non-execution data  
   - Public complaints
 
-- **GIS Layers**:  
+- **GIS Layers**:
+-  🔗 [Download from Google Drive](https://drive.google.com/drive/folders/19JewMkLSk0M6Q6HsJNaThOsfkZZMvXaZ?usp=sharing)
   - Jerusalem city borders  
   - Jerusalem metropolitan borders  
   - West Bank borders  
