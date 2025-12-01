@@ -24,14 +24,18 @@ This repository contains the code, data structure, and documentation for Yodfat 
 ### `files saved in zenodo  - https://zenodo.org/records/17778363`  
 
 - **CBS Data**:  
-  Socio-economic rankings by statistical area (Excel)
+  Socio-economic rankings by statistical area (Excel):
+  - socio_eco_regional.xlsx
+  - socio_eco_suburb.xlsx
+  - socio_eco_urb.xlsx
+  - ultraorthodox_state.xlsx
 
 - **NPTA Data**:  
   - Number of passengers per bus line and station  
-  - Non-execution data  
-  - Public complaints
+  - Non-execution data: extract_npta_060324.xlsx
+  - Public complaints: complaints_raw_sample.xlsx, complaints_clean.xlsx
 
-- **GIS Layers**:
+- **GIS Layers**: in the folder 'governmental_layers.gdb.zip'
   - Jerusalem city borders  
   - Jerusalem metropolitan borders  
   - West Bank borders  
